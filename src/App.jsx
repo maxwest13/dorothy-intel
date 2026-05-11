@@ -442,7 +442,7 @@ export default function App() {
     try {
       setLoading({ msg:"Scanning experiential landscape", sub:"Brand research · Hook scoring" });
       const d1 = await apiFetch({
-        model:"claude-sonnet-4-20250514", max_tokens:2500,
+        model:"claude-sonnet-4-5", max_tokens:2500,
         system:`You are a new business intelligence researcher for Dorothy Creative, a boutique LA experiential marketing agency (clients: Nike, Uber, Hisense, Moloco, NBC). CRITICAL: Respond with ONLY a valid JSON object. No prose, no markdown, no fences. Start with { end with }.`,
         messages:[{role:"user",content:`Research 6 brand prospects for experiential at ${selEvent.label} (${selEvent.season}, ${selEvent.cat}). Mix ACTIVE spenders and UNTAPPED brands. Score each "hookScore" 1-10 (relevant Dorothy case study, timely news, decision-maker accessibility, brand's experiential appetite). Respond ONLY with this JSON:
 {"leads":[{"brand":"string","industry":"string","experientialStatus":"ACTIVE","opportunityNote":"string","recentActivation":"string or null","hookScore":7,"hookNote":"1 sentence","decisionMaker":{"name":"string or null","title":"string","notes":"string"}}]}`}],
@@ -455,7 +455,7 @@ export default function App() {
       let crmMap={};
       try {
         const d2 = await apiFetch({
-          model:"claude-sonnet-4-20250514", max_tokens:1000,
+          model:"claude-sonnet-4-5", max_tokens:1000,
           system:"Use Google Drive. Respond with ONLY a valid JSON object starting with {.",
           messages:[{role:"user",content:`Read Google Sheets file ID: ${CRM_ID}. Check which of these companies appear: ${p1.leads.map(l=>l.brand).join(", ")}. Respond ONLY: {"matches":[{"brand":"string","inCRM":true,"contactName":"string or null","contactTitle":"string or null","contactEmail":"string or null","status":"string or null"}]}`}],
           mcp_servers:[{type:"url",url:"https://drivemcp.googleapis.com/mcp/v1",name:"gdrive"}]
@@ -479,7 +479,7 @@ export default function App() {
     setLoading({ msg:"Pulling brand intel", sub:"News · Activations · Pitch angle" });
     try {
       const d = await apiFetch({
-        model:"claude-sonnet-4-20250514", max_tokens:2000,
+        model:"claude-sonnet-4-5", max_tokens:2000,
         system:"You are a research analyst. Your entire response must be a single valid JSON object. Start with { end with }. No markdown, no fences.",
         messages:[{role:"user",content:`Research ${l.brand} for an experiential marketing pitch at ${selEvent?.label}. Respond ONLY with this JSON:
 {"brandSummary":"string","recentWin":{"headline":"string","detail":"string"},"headlines":[{"title":"string","summary":"string","date":"string"}],"experientialHistory":"string","pitchAngle":"string","recentActivations":["string","string"]}`}],
@@ -501,7 +501,7 @@ export default function App() {
     const ws=windowStatus(selEvent?.season||"JAN 2099");
     try {
       const d = await apiFetch({
-        model:"claude-sonnet-4-20250514", max_tokens:2000,
+        model:"claude-sonnet-4-5", max_tokens:2000,
         system:`You write sharp outreach sequences for Dorothy Creative, a boutique LA experiential agency. Clients: Nike, Uber, Hisense, Moloco, NBC. Peer-to-peer tone. No buzzwords. Your entire response must be a single valid JSON object. Start with { end with }.`,
         messages:[{role:"user",content:`Write a 3-email outreach sequence from Max at Dorothy Creative to ${selLead.decisionMaker?.name||"the experiential lead"} (${selLead.decisionMaker?.title}) at ${selLead.brand}.
 Congrat hook: ${pkg.recentWin?.headline}. Their activation: ${pkg.recentActivations?.[0]||selLead.recentActivation||"their recent brand work"}. Dorothy cred: ${win.client} — ${win.work}. Event: ${selEvent?.label} (${ws.label}). Why they fit: ${pkg.pitchAngle}. Mutual context: ${mutual||"none"}.
@@ -525,7 +525,7 @@ Respond ONLY:
     setLoading({ msg:"Analyzing reply", sub:"Sentiment · Intent · Draft response" });
     try {
       const d = await apiFetch({
-        model:"claude-sonnet-4-20250514", max_tokens:1000,
+        model:"claude-sonnet-4-5", max_tokens:1000,
         system:"You help Dorothy Creative respond to sales replies. Your entire response must be a single valid JSON object. Start with { end with }.",
         messages:[{role:"user",content:`Analyze this reply to Dorothy Creative's outreach${selLead?` to ${selLead.decisionMaker?.name||"contact"} at ${selLead.brand}`:""}: "${replyText}". Write a response moving toward a meeting. Brief, peer-to-peer. Respond ONLY: {"sentiment":"POSITIVE","intent":"string","suggestedResponse":"string","greeting":"string","signoff":"Best,\\nMax","proposedCTA":"string"}`}]
       });
