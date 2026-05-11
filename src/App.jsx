@@ -446,7 +446,6 @@ export default function App() {
         system:`You are a new business intelligence researcher for Dorothy Creative, a boutique LA experiential marketing agency (clients: Nike, Uber, Hisense, Moloco, NBC). CRITICAL: Respond with ONLY a valid JSON object. No prose, no markdown, no fences. Start with { end with }.`,
         messages:[{role:"user",content:`Research 6 brand prospects for experiential at ${selEvent.label} (${selEvent.season}, ${selEvent.cat}). Mix ACTIVE spenders and UNTAPPED brands. Score each "hookScore" 1-10 (relevant Dorothy case study, timely news, decision-maker accessibility, brand's experiential appetite). Respond ONLY with this JSON:
 {"leads":[{"brand":"string","industry":"string","experientialStatus":"ACTIVE","opportunityNote":"string","recentActivation":"string or null","hookScore":7,"hookNote":"1 sentence","decisionMaker":{"name":"string or null","title":"string","notes":"string"}}]}`}],
-        tools:[{type:"web_search_20250305",name:"web_search"}]
       });
       const p1 = safeJSON(extractText(d1.content));
       if(!p1?.leads?.length) throw new Error(`Parse failed: "${extractText(d1.content).slice(0,180).replace(/\n/g," ")}"`);
@@ -483,7 +482,6 @@ export default function App() {
         system:"You are a research analyst. Your entire response must be a single valid JSON object. Start with { end with }. No markdown, no fences.",
         messages:[{role:"user",content:`Research ${l.brand} for an experiential marketing pitch at ${selEvent?.label}. Respond ONLY with this JSON:
 {"brandSummary":"string","recentWin":{"headline":"string","detail":"string"},"headlines":[{"title":"string","summary":"string","date":"string"}],"experientialHistory":"string","pitchAngle":"string","recentActivations":["string","string"]}`}],
-        tools:[{type:"web_search_20250305",name:"web_search"}]
       });
       const p = safeJSON(extractText(d.content));
       if(!p) throw new Error("Target research parse failed");
