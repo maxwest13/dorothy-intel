@@ -76,7 +76,7 @@ function extractText(content){
   }).join("\n");
 }
 async function apiFetch(payload){
-  const res=await fetch("https://dorothy-intel-production.up.railway.app/api/messages",{
+  const res=await fetch("https://dorothy-intel-production-a5db.up.railway.app/api/messages",{
     method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)
   });
   const data=await res.json().catch(()=>({}));
